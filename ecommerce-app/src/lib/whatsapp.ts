@@ -29,7 +29,7 @@ export const buildCheckoutMessage = (order: {
     ``,
     `Total: ₹${order.total}`,
     ``,
-    `Please confirm my order.`,
+    `Please confirm my order and send the payment link.`,
   ];
   return encodeWhatsAppMessage(lines.join("\n"));
 };

@@ -214,7 +214,7 @@ export default function CheckoutPage() {
                 disabled={saving}
                 className="flex h-16 w-full items-center justify-center rounded-2xl bg-emerald-600 px-6 text-sm font-black uppercase tracking-widest text-white shadow-xl shadow-emerald-600/30 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-50 disabled:scale-100"
               >
-                {saving ? "Processing..." : "Finish on WhatsApp 🚀"}
+                {saving ? "Processing..." : "Confirm & Get Payment Link 🚀"}
               </button>
               
               <p className="text-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">Powered by WhatsApp Cash on Delivery</p>
@@ -248,7 +248,10 @@ export default function CheckoutPage() {
             <div className="rounded-[2rem] bg-emerald-50 p-8 border border-emerald-100/50">
               <h3 className="text-xs font-black uppercase tracking-widest text-emerald-700">How it works?</h3>
               <p className="mt-3 text-sm font-bold text-emerald-900 leading-relaxed">
-                Clicking finish will open WhatsApp with your order details pre-typed. Just hit send to confirm your COD order!
+                1. Click confirm to open WhatsApp.<br/>
+                2. Send the pre-filled message.<br/>
+                3. We will send you a **Payment Link**.<br/>
+                4. Pay & get instant confirmation!
               </p>
             </div>
           </aside>

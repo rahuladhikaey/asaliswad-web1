@@ -12,7 +12,7 @@ Asali Swad Business & Product Information:
 💰 Refund Policy:
 - Refund processed within 3–5 business days.
 - Refund method: Same as payment method or Store Credit.
-- For Cash on Delivery (COD): Refund via bank transfer or UPI.
+- PAYMENTS: We support Cash on Delivery AND Online Payment via Link. After placing an order, the customer will receive a secure Payment Link (Razorpay/UPI) directly on WhatsApp. Once paid, the order is confirmed for delivery.
 
 🚚 Delivery Policy:
 - Delivery time: 2–5 days (local), 5–7 days (other areas).

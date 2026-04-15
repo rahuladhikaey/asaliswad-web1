@@ -7,6 +7,7 @@ import { encodeWhatsAppMessage, buildProductOrderMessage } from "@/lib/whatsapp"
 import { Product, Category } from "@/lib/types";
 import { LoadingCard } from "@/components/LoadingCard";
 import { AddToCartButton } from "@/components/AddToCartButton";
+import { BuyNowButton } from "@/components/BuyNowButton";
 import { Header } from "@/components/Header";
 import UserMenu from "@/components/UserMenu";
 
@@ -124,15 +125,8 @@ export default function ProductsPage() {
                        <AddToCartButton product={product} />
                     </div>
 
-                    <div className="mt-4 grid grid-cols-1 gap-2 border-t border-slate-50 pt-4">
-                      <a
-                        href={encodeWhatsAppMessage(buildProductOrderMessage(product.name, product.price, 1))}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center justify-center rounded-xl bg-slate-900 py-2.5 text-[11px] font-black uppercase tracking-widest text-white transition-all hover:bg-slate-800 active:scale-95"
-                      >
-                        Order Now
-                      </a>
+                    <div className="mt-4 border-t border-slate-50 pt-4">
+                      <BuyNowButton product={product} />
                     </div>
                   </div>
                 </article>

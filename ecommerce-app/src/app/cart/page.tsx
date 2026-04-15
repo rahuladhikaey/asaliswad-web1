@@ -96,12 +96,20 @@ export default function CartPage() {
                   </div>
                 </div>
                 
-                <Link
-                  href="/checkout"
-                  className="flex h-16 w-full items-center justify-center rounded-2xl bg-emerald-600 text-sm font-black uppercase tracking-widest transition-all hover:bg-emerald-500 active:scale-95 shadow-xl shadow-emerald-500/10"
-                >
-                  Pay via WhatsApp COD
-                </Link>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Link
+                    href="/checkout?method=online"
+                    className="flex h-16 items-center justify-center rounded-2xl bg-emerald-600 text-[11px] font-black uppercase tracking-widest text-white shadow-xl shadow-emerald-500/20 transition-all hover:bg-emerald-500 active:scale-95"
+                  >
+                    Pay Online 💳
+                  </Link>
+                  <Link
+                    href="/checkout?method=cod"
+                    className="flex h-16 items-center justify-center rounded-2xl bg-white text-[11px] font-black uppercase tracking-widest text-slate-900 shadow-xl shadow-slate-900/5 transition-all hover:bg-slate-50 border border-slate-100 active:scale-95"
+                  >
+                    Cash on Delivery 📦
+                  </Link>
+                </div>
               </div>
             </div>
           )}

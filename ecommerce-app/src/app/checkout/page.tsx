@@ -1,16 +1,18 @@
 "use client";
 
-import { FormEvent, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { FormEvent, useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import { buildCheckoutMessage } from "@/lib/whatsapp";
 import { useCart } from "@/context/CartContext";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import UserMenu from "@/components/UserMenu";
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialMethod = searchParams.get("method")?.toUpperCase() === "COD" ? "COD" : "ONLINE";
+  
   const { cart, totalItems, totalValue, clearCart } = useCart();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -22,9 +24,25 @@ export default function CheckoutPage() {
   const [message, setMessage] = useState("");
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<"ONLINE" | "COD">(initialMethod);
+
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!name || !phone || !village || !postOffice || !pincode || !addressDetail) {
+      setMessage("Please fill in all delivery details to proceed.");
+      return;
+    }
 
     if (!cart.length) {
       setMessage("Your cart is empty. Add products before checking out.");
@@ -32,43 +50,96 @@ export default function CheckoutPage() {
     }
 
     setSaving(true);
+    const fullAddress = `Vill: ${village}, P.O: ${postOffice}, Pin: ${pincode}, Info: ${addressDetail}`;
     
-    // Combine address details
-    const fullAddress = `Vill: ${village}, P.O: ${postOffice}, Pin: ${pincode}${addressDetail ? `, Info: ${addressDetail}` : ""}`;
+    try {
+      if (paymentMethod === "COD") {
+        // Handle COD Flow
+        const response = await fetch("/api/checkout/cod", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            customer_name: name,
+            phone: phone,
+            address: fullAddress,
+            items: cart,
+            total: totalValue,
+          }),
+        });
 
-    const order = {
-      customer_name: name,
-      phone,
-      address: fullAddress,
-      items: cart.map((item) => ({
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price,
-        subtotal: item.quantity * item.price,
-      })),
-      total: totalValue,
-    };
+        const data = await response.json();
+        if (data.success) {
+          clearCart();
+          router.push(`/order-success?order_id=${data.orderId}`);
+        } else {
+          setMessage(data.error ? `Could not place COD order: ${data.error}` : "Could not place COD order. Please try again.");
+        }
+      } else {
+        // Handle Online Flow (Razorpay)
+        const res = await loadRazorpay();
+        if (!res) {
+          setMessage("Razorpay SDK failed to load. Please check your connection.");
+          setSaving(false);
+          return;
+        }
 
-    const whatsappUrl = buildCheckoutMessage(order);
+        const response = await fetch("/api/checkout/create-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: totalValue }),
+        });
 
-    const { error } = await supabase.from("orders").insert([
-      {
-        customer_name: order.customer_name,
-        phone: order.phone,
-        address: order.address,
-        product_details: JSON.stringify(order.items),
-        status: "Pending",
-      },
-    ]);
+        const orderData = await response.json();
+        if (!orderData.id) {
+          setMessage("Could not create Razorpay order. " + (orderData.error || ""));
+          setSaving(false);
+          return;
+        }
 
-    setSaving(false);
-    if (error) {
-      setMessage("Order saved locally, but we could not store it in Supabase. You can still continue with WhatsApp.");
-    } else {
-      clearCart();
+        const options = {
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+          amount: orderData.amount,
+          currency: orderData.currency,
+          name: "Asali Swad",
+          description: "Premium Food Order",
+          order_id: orderData.id,
+          handler: async function (response: any) {
+            const verifyRes = await fetch("/api/checkout/verify-payment", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                customer_name: name,
+                phone: phone,
+                address: fullAddress,
+                items: cart,
+                total: totalValue,
+              }),
+            });
+
+            const verifyData = await verifyRes.json();
+            if (verifyData.success) {
+              clearCart();
+              router.push(`/order-success?order_id=${verifyData.orderId}`);
+            } else {
+              setMessage("Payment verification failed. Please contact support.");
+            }
+          },
+          prefill: { name, contact: phone },
+          theme: { color: "#059669" },
+        };
+
+        const paymentObject = new (window as any).Razorpay(options);
+        paymentObject.open();
+      }
+    } catch (err: any) {
+      console.error(err);
+      setMessage("An unexpected error occurred. Please try again.");
+    } finally {
+      setSaving(false);
     }
-
-    window.location.href = whatsappUrl;
   };
 
   useEffect(() => {
@@ -194,11 +265,55 @@ export default function CheckoutPage() {
                 <div className="group relative">
                   <label className="text-[10px] font-black uppercase tracking-[0.1em] text-slate-400 mb-2 block ml-1 transition-colors group-focus-within:text-emerald-600">Landmark / Extra Info</label>
                   <input
+                    required
                     value={addressDetail}
-                    placeholder="Optional details..."
+                    placeholder="Specific address or landmark"
                     onChange={(event) => setAddressDetail(event.target.value)}
                     className="w-full rounded-2xl border-2 border-slate-50 bg-slate-50 px-6 py-4 text-sm font-bold outline-none transition-all placeholder:text-slate-300 focus:border-emerald-500/20 focus:bg-white focus:ring-4 focus:ring-emerald-500/5"
                   />
+                </div>
+              </div>
+
+              <div className="space-y-4 pt-4 border-t border-slate-50">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Select Payment Method</p>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod("ONLINE")}
+                    className={`flex items-center gap-4 p-5 rounded-2xl border-2 transition-all ${
+                      paymentMethod === "ONLINE" 
+                        ? "border-emerald-600 bg-emerald-50/50 shadow-lg shadow-emerald-500/5" 
+                        : "border-slate-50 bg-slate-50 hover:border-slate-200"
+                    }`}
+                  >
+                    <div className={`h-10 w-10 rounded-xl flex items-center justify-center text-xl ${paymentMethod === "ONLINE" ? "bg-emerald-600 text-white" : "bg-white text-slate-400"}`}>
+                      💳
+                    </div>
+                    <div className="text-left">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-900 leading-tight">Online Payment</p>
+                      <p className="text-[9px] font-bold text-slate-400 mt-0.5">Card, UPI, Netbanking</p>
+                    </div>
+                    {paymentMethod === "ONLINE" && <div className="ml-auto text-emerald-600 text-xl font-black">✓</div>}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod("COD")}
+                    className={`flex items-center gap-4 p-5 rounded-2xl border-2 transition-all ${
+                      paymentMethod === "COD" 
+                        ? "border-emerald-600 bg-emerald-50/50 shadow-lg shadow-emerald-500/5" 
+                        : "border-slate-50 bg-slate-50 hover:border-slate-200"
+                    }`}
+                  >
+                    <div className={`h-10 w-10 rounded-xl flex items-center justify-center text-xl ${paymentMethod === "COD" ? "bg-emerald-600 text-white" : "bg-white text-slate-400"}`}>
+                      📦
+                    </div>
+                    <div className="text-left">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-900 leading-tight">Cash on Delivery</p>
+                      <p className="text-[9px] font-bold text-slate-400 mt-0.5">Pay upon package arrival</p>
+                    </div>
+                    {paymentMethod === "COD" && <div className="ml-auto text-emerald-600 text-xl font-black">✓</div>}
+                  </button>
                 </div>
               </div>
 
@@ -214,7 +329,7 @@ export default function CheckoutPage() {
                 disabled={saving}
                 className="flex h-16 w-full items-center justify-center rounded-2xl bg-emerald-600 px-6 text-sm font-black uppercase tracking-widest text-white shadow-xl shadow-emerald-600/30 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-50 disabled:scale-100"
               >
-                {saving ? "Processing..." : "Confirm & Get Payment Link 🚀"}
+                {saving ? "Processing..." : paymentMethod === "ONLINE" ? "Continue to Secure Payment 💳" : "Confirm COD Order 🚀"}
               </button>
               
               <p className="text-center text-[10px] font-bold text-slate-300 uppercase tracking-widest">Powered by WhatsApp Cash on Delivery</p>
@@ -248,16 +363,28 @@ export default function CheckoutPage() {
             <div className="rounded-[2rem] bg-emerald-50 p-8 border border-emerald-100/50">
               <h3 className="text-xs font-black uppercase tracking-widest text-emerald-700">How it works?</h3>
               <p className="mt-3 text-sm font-bold text-emerald-900 leading-relaxed">
-                1. Click confirm to open WhatsApp.<br/>
-                2. Send the pre-filled message.<br/>
-                3. We will send you a **Payment Link**.<br/>
-                4. Pay & get instant confirmation!
+                1. Provide your address and contact details.<br/>
+                2. Choose between **Online Payment** or **COD**.<br/>
+                3. {paymentMethod === "ONLINE" ? "Pay instantly with Razorpay." : "Confirm your order instantly."}<br/>
+                4. Get real-time updates on your delivery!
               </p>
             </div>
           </aside>
         </div>
       </section>
     </main>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={
+      <main className="flex min-h-screen items-center justify-center bg-slate-50">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-600 border-t-transparent" />
+      </main>
+    }>
+      <CheckoutContent />
+    </Suspense>
   );
 }
 

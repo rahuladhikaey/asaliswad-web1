@@ -1,0 +1,38 @@
+import { NextResponse } from "next/server";
+import { supabaseServer } from "@/lib/supabaseServer";
+
+export async function POST(req: Request) {
+  try {
+    const {
+      customer_name,
+      phone,
+      address,
+      items,
+      total,
+    } = await req.json();
+
+    // Save Order to Supabase as COD
+    const { data, error } = await supabaseServer.from("orders").insert([
+      {
+        customer_name,
+        phone,
+        address,
+        product_details: JSON.stringify(items),
+        total_amount: total,
+        payment_method: "COD",
+        payment_status: "PENDING",
+        order_status: "PENDING",
+      },
+    ]).select().single();
+
+    if (error) {
+      console.error("Supabase COD Order Error:", error);
+      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true, orderId: data.id });
+  } catch (error: any) {
+    console.error("COD Error:", error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}

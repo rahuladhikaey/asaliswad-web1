@@ -20,6 +20,11 @@ type Order = {
   address: string;
   product_details: string;
   status: string;
+  payment_status: string;
+  payment_method: string;
+  razorpay_order_id?: string;
+  razorpay_payment_id?: string;
+  total_amount: number;
   created_at: string;
 };
 
@@ -719,14 +724,30 @@ export default function AdminPage() {
                         </div>
                       </div>
                       <div className="flex flex-col items-end gap-3">
-                         <span className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ${
-                           order.status === 'Delivered' 
-                             ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
-                             : 'bg-amber-50 text-amber-600 border border-amber-100'
-                         }`}>
-                           {order.status || 'Pending'}
-                         </span>
-                         <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Order ID: #{order.id}</p>
+                         <div className="flex flex-wrap justify-end gap-2">
+                            <span className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ${
+                              order.payment_method === 'COD' 
+                                ? 'bg-amber-100 text-amber-700 border border-amber-200' 
+                                : 'bg-blue-100 text-blue-700 border border-blue-200'
+                            }`}>
+                              Method: {order.payment_method || 'N/A'}
+                            </span>
+                            <span className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ${
+                              order.payment_status === 'COMPLETE' 
+                                ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
+                                : 'bg-rose-50 text-rose-600 border border-rose-100'
+                            }`}>
+                              Payment: {order.payment_status || 'PENDING'}
+                            </span>
+                            <span className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ${
+                              order.status === 'Delivered' 
+                                ? 'bg-slate-900 text-white' 
+                                : 'bg-amber-50 text-amber-600 border border-amber-100'
+                            }`}>
+                              Order: {order.status || 'PENDING'}
+                            </span>
+                         </div>
+                         <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Order ID: #{order.id} | Razorpay: {order.razorpay_order_id?.slice(-8) || 'N/A'}</p>
                       </div>
                     </div>
 
@@ -749,25 +770,42 @@ export default function AdminPage() {
                        <div className="flex md:flex-col gap-3 justify-center">
                           <button
                             type="button"
-                            onClick={() => handleOrderStatusUpdate(order.id, "Pending")}
-                            className={`h-14 px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                               order.status !== 'Delivered' 
-                                 ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20' 
-                                 : 'bg-slate-50 text-slate-400 hover:bg-slate-100 border border-slate-100'
-                            }`}
+                            onClick={() => {
+                              alert("Initiating Shiprocket Shipment for Order #" + order.id);
+                              // Logic for Shiprocket API call would go here
+                              handleOrderStatusUpdate(order.id, "Shipped");
+                            }}
+                            disabled={order.status === 'Shipped' || order.status === 'Delivered'}
+                            className={`h-14 px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 disabled:opacity-30 disabled:grayscale`}
                           >
-                            Mark Pending
+                            Create Shipment (Shiprocket) 🚚
                           </button>
+                          
+                          {order.payment_method === 'COD' && order.payment_status === 'PENDING' && (
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                await supabase.from("orders").update({ payment_status: "COMPLETE" }).eq("id", order.id);
+                                fetchData();
+                                setStatusMessage("Payment marked as RECEIVED for Order #" + order.id);
+                              }}
+                              className="h-14 px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all bg-amber-500 text-white shadow-lg shadow-amber-600/20 hover:bg-amber-600"
+                            >
+                              Confirm Cash Received 💸
+                            </button>
+                          )}
+
                           <button
                             type="button"
                             onClick={() => handleOrderStatusUpdate(order.id, "Delivered")}
+                            disabled={order.status === 'Delivered'}
                             className={`h-14 px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
                                order.status === 'Delivered' 
-                                 ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' 
+                                 ? 'bg-emerald-600 text-white' 
                                  : 'bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-600 hover:text-white'
                             }`}
                           >
-                            Dispatch ✅
+                            {order.status === 'Delivered' ? 'Delivered ✅' : 'Mark Delivered ✅'}
                           </button>
                        </div>
                     </div>

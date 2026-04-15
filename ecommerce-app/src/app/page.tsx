@@ -2,6 +2,7 @@ import Link from "next/link";
 import { supabaseServer } from "@/lib/supabaseServer";
 import { Product, Category } from "@/lib/types";
 import { AddToCartButton } from "@/components/AddToCartButton";
+import { BuyNowButton } from "@/components/BuyNowButton";
 import { BannerCarousel } from "@/components/BannerCarousel";
 import { Header } from "@/components/Header";
 import UserMenu from "@/components/UserMenu";
@@ -103,12 +104,15 @@ export default async function HomePage() {
                     <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">Pure Quality</p>
                   </Link>
                   
-                  <div className="mt-5 flex items-center justify-between gap-2">
-                    <div className="flex flex-col">
-                       <span className="text-[10px] font-bold text-slate-300 line-through">₹{Math.round(product.price * 1.2)}</span>
-                       <span className="text-base font-black text-slate-900">₹{product.price}</span>
+                  <div className="mt-5 space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex flex-col">
+                         <span className="text-[10px] font-bold text-slate-300 line-through">₹{Math.round(product.price * 1.2)}</span>
+                         <span className="text-base font-black text-slate-900">₹{product.price}</span>
+                      </div>
+                      <AddToCartButton product={product} />
                     </div>
-                    <AddToCartButton product={product} />
+                    <BuyNowButton product={product} />
                   </div>
                 </div>
               </article>

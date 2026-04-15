@@ -3,6 +3,7 @@ import { supabaseServer } from "@/lib/supabaseServer";
 import { buildProductOrderMessage, encodeWhatsAppMessage } from "@/lib/whatsapp";
 import { Product } from "@/lib/types";
 import { AddToCartButton } from "@/components/AddToCartButton";
+import { BuyNowButton } from "@/components/BuyNowButton";
 import { Header } from "@/components/Header";
 import UserMenu from "@/components/UserMenu";
 
@@ -91,14 +92,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 <div className="w-full sm:w-auto">
                     <AddToCartButton product={product} className="h-14 w-full sm:w-40 rounded-2xl bg-emerald-600 text-white font-black" />
                 </div>
-                <a
-                  href={orderLink}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex h-14 flex-1 items-center justify-center rounded-2xl bg-slate-950 px-8 text-sm font-black uppercase tracking-widest text-white shadow-xl shadow-slate-900/20 transition-all hover:bg-slate-800 active:scale-95"
-                >
-                  Order via WhatsApp
-                </a>
+                <div className="flex-1">
+                  <BuyNowButton product={product} />
+                </div>
               </div>
             </div>
 

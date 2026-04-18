@@ -35,12 +35,13 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
   return (
     <>
       {/* Backdrop */}
-      <div
-        className={`fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 ${
-          isOpen ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
-        onClick={onClose}
-      />
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 opacity-100"
+          onClick={onClose}
+        />
+      )}
+
 
       {/* Drawer Panel */}
       <div

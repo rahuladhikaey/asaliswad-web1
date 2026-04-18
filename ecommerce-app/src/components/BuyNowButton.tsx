@@ -8,10 +8,7 @@ export function BuyNowButton({ product, className }: { product: Product, classNa
   const { cart, addToCart } = useCart();
   const router = useRouter();
   
-  const handleBuyNow = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
+  const handleBuyNow = () => {
     // Check if item is already in cart
     const cartItem = cart.find(item => item.id === product.id);
     if (!cartItem) {
@@ -20,6 +17,7 @@ export function BuyNowButton({ product, className }: { product: Product, classNa
     
     router.push("/checkout");
   };
+
 
   return (
     <button

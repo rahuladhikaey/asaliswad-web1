@@ -105,10 +105,11 @@ export default function CartPage() {
                   </Link>
                   <Link
                     href="/checkout?method=cod"
-                    className="flex h-16 items-center justify-center rounded-2xl bg-white text-[11px] font-black uppercase tracking-widest text-slate-900 shadow-xl shadow-slate-900/5 transition-all hover:bg-slate-50 border border-slate-100 active:scale-95"
+                    className="flex h-16 items-center justify-center rounded-2xl bg-amber-400 text-[11px] font-black uppercase tracking-widest text-slate-900 shadow-xl shadow-amber-400/20 transition-all hover:bg-amber-300 active:scale-95"
                   >
                     Cash on Delivery 📦
                   </Link>
+
                 </div>
               </div>
             </div>

@@ -55,10 +55,10 @@ export function Header({
             ) : (
               <>
                 <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-emerald-600 truncate">
-                  Asali Swad
+                  ASALI
                 </span>
-                <span className="hidden md:block text-sm font-bold text-slate-800">
-                  Premium Spices
+                <span className="text-[9px] md:text-[10px] font-bold text-slate-400 -mt-0.5">
+                  SWAD
                 </span>
               </>
             )}

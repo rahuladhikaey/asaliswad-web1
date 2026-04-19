@@ -36,7 +36,7 @@ export default async function HomePage() {
 
       {/* Hero Section Container */}
       <div className="mx-auto max-w-7xl px-4 md:px-8">
-        
+
         {/* Story-like Banner Carousel */}
         <div className="pt-2">
           <BannerCarousel />
@@ -48,8 +48,8 @@ export default async function HomePage() {
         {/* Categories Section - Clean Pills */}
         <section className="mt-10">
           <div className="flex items-center justify-between mb-5">
-             <h2 className="text-xl font-black text-slate-900 md:text-2xl">Shop by Category</h2>
-             <Link href="/products" className="text-xs font-bold uppercase tracking-widest text-emerald-600 hover:text-emerald-700">View All</Link>
+            <h2 className="text-xl font-black text-slate-900 md:text-2xl">Shop by Category</h2>
+            <Link href="/products" className="text-xs font-bold uppercase tracking-widest text-emerald-600 hover:text-emerald-700">View All</Link>
           </div>
           <div className="no-scrollbar flex w-full gap-4 overflow-x-auto pb-4 snap-x">
             {categories.map((category) => (
@@ -70,7 +70,7 @@ export default async function HomePage() {
             <div className="h-0.5 flex-1 mx-4 bg-slate-100 hidden sm:block" />
             <Link href="/products" className="rounded-full bg-emerald-50 px-4 py-2 text-xs font-black uppercase tracking-wider text-emerald-700 hover:bg-emerald-100 transition-colors">Explorer</Link>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 lg:gap-6">
             {products.map((product) => (
               <article
@@ -98,12 +98,12 @@ export default async function HomePage() {
                     </h3>
                     <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">Pure Quality</p>
                   </Link>
-                  
+
                   <div className="mt-5 space-y-3">
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex flex-col">
-                         <span className="text-[10px] font-bold text-slate-300 line-through">₹{Math.round(product.price * 1.2)}</span>
-                         <span className="text-base font-black text-slate-900">₹{product.price}</span>
+                        <span className="text-[10px] font-bold text-slate-300 line-through">₹{Math.round(product.price * 1.2)}</span>
+                        <span className="text-base font-black text-slate-900">₹{product.price}</span>
                       </div>
                       <AddToCartButton product={product} />
                     </div>

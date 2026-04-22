@@ -1,8 +1,24 @@
 import { NextResponse } from "next/server";
-import crypto from "node:crypto";
 import { supabaseServer } from "@/lib/supabaseServer";
 
 export const runtime = 'edge';
+
+async function verifySignature(orderId: string, paymentId: string, signature: string, secret: string) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(orderId + "|" + paymentId);
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const hmac = await crypto.subtle.sign("HMAC", key, data);
+  const digest = Array.from(new Uint8Array(hmac))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+  return digest === signature;
+}
 
 export async function POST(req: Request) {
   try {
@@ -18,13 +34,12 @@ export async function POST(req: Request) {
     } = await req.json();
 
     // 1. Verify Signature
-    const body = razorpay_order_id + "|" + razorpay_payment_id;
-    const expectedSignature = crypto
-      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
-      .update(body.toString())
-      .digest("hex");
-
-    const isAuthentic = expectedSignature === razorpay_signature;
+    const isAuthentic = await verifySignature(
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      process.env.RAZORPAY_KEY_SECRET!
+    );
 
     if (!isAuthentic) {
       return NextResponse.json({ success: false, message: "Invalid signature" }, { status: 400 });

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import Razorpay from "razorpay";
 
+export const runtime = 'edge';
+
 export async function POST(req: Request) {
   // Initialize Razorpay inside the request to prevent build-time crashes
   if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {

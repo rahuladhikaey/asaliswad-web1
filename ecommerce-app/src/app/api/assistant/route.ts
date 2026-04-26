@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 
-export const runtime = 'edge';
 
 const KNOWLEDGE_BASE = `
 Asali Swad Business & Product Information:

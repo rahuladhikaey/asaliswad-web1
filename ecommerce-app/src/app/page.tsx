@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { MobileSearch } from "@/components/MobileSearch";
 export const dynamic = 'force-dynamic';
-export const runtime = 'edge';
 import { supabaseServer } from "@/lib/supabaseServer";
 import { Product, Category } from "@/lib/types";
 import { AddToCartButton } from "@/components/AddToCartButton";

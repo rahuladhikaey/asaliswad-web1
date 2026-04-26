@@ -69,17 +69,22 @@ CREATE TABLE orders (
 
 ## 🚀 Deployment
 
-We recommend deploying with **Cloudflare Pages** using the `@cloudflare/next-on-pages` adapter.
+We recommend deploying with **Render** for a full Node.js environment.
 
-1. **Connect to GitHub**: Link your repository in the Cloudflare Dashboard.
-2. **Build Settings**:
-   - **Framework Preset**: `None` (or `Next.js` if available, but manual config is safer)
-   - **Build Command**: `npm run build-pages`
-   - **Build Output Directory**: `.vercel/output/static`
-3. **Environment Variables**:
-   - `NEXT_PUBLIC_SUPABASE_URL`: `https://zhmftnlqkfppqnofpgjz.supabase.co`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: `sb_publishable_Pe9Nk-lo1h0F4UYFyw1tOw_9okQFDi1`
-4. **Deploy**: Click **Save and Deploy**.
+1. **Connect to GitHub**: Link your repository in the [Render Dashboard](https://dashboard.render.com).
+2. **New Blueprint**: Click **New +** and select **Blueprint**.
+3. **Connect Repo**: Select this repository.
+4. **Environment Variables**: Add the following in the Render dashboard:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `NEXT_PUBLIC_RAZORPAY_KEY_ID`
+   - `RAZORPAY_KEY_ID`
+   - `RAZORPAY_KEY_SECRET`
+5. **Deploy**: Render will automatically use the `render.yaml` file to build and deploy.
+
+Alternatively, see [RENDER_DEPLOY.md](./RENDER_DEPLOY.md) for more details.
+
 
 ## 📦 Scripts
 

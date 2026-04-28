@@ -20,3 +20,19 @@ services:
         sync: false
       - key: NODE_VERSION
         value: 20
+
+  # Keeper service to prevent cold starts
+  - type: web
+    name: asali-swad-keeper
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node keeper.js
+    envVars:
+      - key: SITE_URL
+        fromService:
+          type: web
+          name: asali-swad-ecommerce
+          property: url
+      - key: NODE_VERSION
+        value: 20

@@ -23,6 +23,28 @@ export default function ProductDetailTemplate({
 
   return (
     <div className="bg-white">
+      {/* Keyframe animations for image panning */}
+      <style jsx>{`
+        @keyframes panLeftToRight {
+          0%, 100% { transform: translateX(-8%) scale(1.2); }
+          50% { transform: translateX(8%) scale(1.2); }
+        }
+        @keyframes panRightToLeft {
+          0%, 100% { transform: translateX(8%) scale(1.2); }
+          50% { transform: translateX(-8%) scale(1.2); }
+        }
+        .pan-lr {
+          animation: panLeftToRight 12s ease-in-out infinite;
+        }
+        .pan-rl {
+          animation: panRightToLeft 12s ease-in-out infinite;
+        }
+        .pan-lr:hover, .pan-rl:hover {
+          animation-play-state: paused;
+          transform: scale(1.15) !important;
+        }
+      `}</style>
+
       <div className="mx-auto max-w-[1440px] px-4 py-8 md:px-8 lg:py-12">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-start">
 
@@ -34,14 +56,16 @@ export default function ProductDetailTemplate({
                 {images.map((img, idx) => (
                   <div 
                     key={idx} 
-                    className={`relative overflow-hidden rounded-[3rem] border border-slate-100 bg-white p-8 group transition-all duration-700 hover:shadow-2xl hover:shadow-slate-200/50 ${
+                    className={`relative overflow-hidden rounded-[3rem] border border-slate-100 bg-white group transition-all duration-700 hover:shadow-2xl hover:shadow-slate-200/50 ${
                       images.length === 1 ? "aspect-square" : "aspect-[4/5]"
                     }`}
                   >
                     <img
                       src={img}
                       alt={`${product.name} - View 0${idx + 1}`}
-                      className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-110"
+                      className={`h-full w-full object-cover transition-transform duration-700 ${
+                        idx % 2 === 0 ? "pan-lr" : "pan-rl"
+                      }`}
                     />
                     
                     {/* Wishlist on first image */}
@@ -63,12 +87,12 @@ export default function ProductDetailTemplate({
               <div className="hidden lg:grid grid-cols-2 gap-4 mt-2">
                 <AddToCartButton 
                   product={product} 
-                  className="flex h-16 items-center justify-center gap-3 rounded-2xl bg-[#ff9f00] text-sm font-black uppercase tracking-widest text-white shadow-xl shadow-orange-500/20 transition-all hover:bg-orange-600 active:scale-95"
+                  className="flex h-16 items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-[#b8e636] to-[#8cc63f] text-sm font-black uppercase tracking-widest text-white shadow-xl shadow-lime-400/30 transition-all hover:from-[#a5d32a] hover:to-[#7ab535] active:scale-95"
                 />
                 <div className="w-full">
                    <BuyNowButton 
                      product={product} 
-                     className="flex h-16 w-full items-center justify-center gap-3 rounded-2xl bg-[#fb641b] text-sm font-black uppercase tracking-widest text-white shadow-xl shadow-orange-600/20 transition-all hover:bg-orange-700 active:scale-95"
+                     className="flex h-16 w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-[#16a34a] to-[#15803d] text-sm font-black uppercase tracking-widest text-white shadow-xl shadow-green-600/30 transition-all hover:from-[#138a3f] hover:to-[#116d34] active:scale-95"
                    />
                 </div>
               </div>
@@ -233,11 +257,11 @@ export default function ProductDetailTemplate({
         <div className="grid grid-cols-2 h-full w-full">
           <AddToCartButton 
             product={product} 
-            className="flex items-center justify-center bg-[#ff9f00] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#f39700] transition-colors border-r border-white/10"
+            className="flex items-center justify-center bg-gradient-to-r from-[#b8e636] to-[#8cc63f] text-white text-[10px] font-black uppercase tracking-widest hover:from-[#a5d32a] hover:to-[#7ab535] transition-colors border-r border-white/10"
           />
           <BuyNowButton 
             product={product} 
-            className="flex items-center justify-center bg-[#fb641b] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#e65a16] transition-colors"
+            className="flex items-center justify-center bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white text-[10px] font-black uppercase tracking-widest hover:from-[#138a3f] hover:to-[#116d34] transition-colors"
           />
         </div>
       </div>

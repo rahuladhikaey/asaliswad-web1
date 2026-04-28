@@ -7,6 +7,7 @@ import { BuyNowButton } from "@/components/BuyNowButton";
 import { WishlistButton } from "@/components/WishlistButton";
 import { ShieldCheck, Truck, RefreshCcw, Tag, ChevronRight, Star } from "lucide-react";
 import Link from "next/link";
+import ProductImageCarousel from "@/components/ProductImageCarousel";
 
 export default function ProductDetailTemplate({ 
   product, 
@@ -23,64 +24,18 @@ export default function ProductDetailTemplate({
 
   return (
     <div className="bg-white">
-      {/* Keyframe animations for image panning */}
-      <style jsx>{`
-        @keyframes panLeftToRight {
-          0%, 100% { transform: translateX(-8%) scale(1.2); }
-          50% { transform: translateX(8%) scale(1.2); }
-        }
-        @keyframes panRightToLeft {
-          0%, 100% { transform: translateX(8%) scale(1.2); }
-          50% { transform: translateX(-8%) scale(1.2); }
-        }
-        .pan-lr {
-          animation: panLeftToRight 12s ease-in-out infinite;
-        }
-        .pan-rl {
-          animation: panRightToLeft 12s ease-in-out infinite;
-        }
-        .pan-lr:hover, .pan-rl:hover {
-          animation-play-state: paused;
-          transform: scale(1.15) !important;
-        }
-      `}</style>
-
       <div className="mx-auto max-w-[1440px] px-4 py-8 md:px-8 lg:py-12">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-start">
 
-          {/* LEFT COLUMN: Premium Side-by-Side Gallery */}
+          {/* LEFT COLUMN: Interactive Image Carousel (Like Flipkart/Amazon) */}
           <div className="lg:col-span-7 lg:sticky lg:top-24">
             <div className="flex flex-col gap-6">
-              {/* Product Gallery Grid */}
-              <div className={`grid gap-4 ${images.length > 1 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1"}`}>
-                {images.map((img, idx) => (
-                  <div 
-                    key={idx} 
-                    className={`relative overflow-hidden rounded-[3rem] border border-slate-100 bg-white group transition-all duration-700 hover:shadow-2xl hover:shadow-slate-200/50 ${
-                      images.length === 1 ? "aspect-square" : "aspect-[4/5]"
-                    }`}
-                  >
-                    <img
-                      src={img}
-                      alt={`${product.name} - View 0${idx + 1}`}
-                      className={`h-full w-full object-cover transition-transform duration-700 ${
-                        idx % 2 === 0 ? "pan-lr" : "pan-rl"
-                      }`}
-                    />
-                    
-                    {/* Wishlist on first image */}
-                    {idx === 0 && (
-                      <div className="absolute right-8 top-8 z-10">
-                        <WishlistButton product={product} />
-                      </div>
-                    )}
-                    
-                    {/* View Badge */}
-                    <div className="absolute bottom-8 left-8 flex h-9 items-center rounded-2xl bg-white/40 border border-white/50 px-4 backdrop-blur-xl shadow-sm">
-                       <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900/60">Angle View 0{idx + 1}</span>
-                    </div>
-                  </div>
-                ))}
+              {/* Image Carousel with Slide Controls */}
+              <ProductImageCarousel images={images} productName={product.name} />
+
+              {/* Wishlist Button */}
+              <div className="flex justify-end">
+                <WishlistButton product={product} />
               </div>
 
               {/* Action Buttons - Desktop (Flipkart Colors) */}

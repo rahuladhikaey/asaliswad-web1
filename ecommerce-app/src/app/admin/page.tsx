@@ -587,7 +587,7 @@ export default function AdminPage() {
 
                             // Validate file sizes
                             let totalSize = 0;
-                            let oversizedFiles = [];
+                            let oversizedFiles: string[] = [];
                             Array.from(files).forEach((file) => {
                               const fileSizeMB = file.size / (1024 * 1024);
                               totalSize += fileSizeMB;

@@ -12,6 +12,8 @@ const ADMIN_AUTH_STORAGE_KEY = "admin-authorized";
 const ADMIN_AUTH_USER_KEY = "admin-user";
 const PRODUCT_IMAGES_BUCKET = "product-images";
 const PRODUCT_IMAGES_FOLDER = "product-images";
+const MAX_PRODUCT_IMAGES = 2;
+const MAX_IMAGE_SIZE_MB = 5;
 
 type Order = {
   id: number;
@@ -158,6 +160,12 @@ export default function AdminPage() {
     let storageFallback = false;
 
     if (imageFiles && imageFiles.length > 0) {
+      // Enforce maximum images limit at submission
+      if (imageFiles.length > MAX_PRODUCT_IMAGES) {
+        setStatusMessage(`Cannot upload more than ${MAX_PRODUCT_IMAGES} images. You selected ${imageFiles.length}.`);
+        return;
+      }
+
       const uploads = Array.from(imageFiles).map(async (file) => {
         const path = `${PRODUCT_IMAGES_FOLDER}/${Date.now()}-${file.name}`;
         const { error } = await supabaseStorage.storage.from(PRODUCT_IMAGES_BUCKET).upload(path, file, { cacheControl: "3600", upsert: false });
@@ -565,7 +573,38 @@ export default function AdminPage() {
                           type="file"
                           id="product-images"
                           multiple
-                          onChange={(event) => setProductForm((prev) => ({ ...prev, imageFiles: event.target.files }))}
+                          accept="image/jpeg,image/png,image/webp"
+                          onChange={(event) => {
+                            const files = event.target.files;
+                            if (!files) return;
+
+                            // Validate number of files
+                            if (files.length > MAX_PRODUCT_IMAGES) {
+                              setStatusMessage(`Maximum ${MAX_PRODUCT_IMAGES} images allowed. You selected ${files.length}.`);
+                              event.target.value = "";
+                              return;
+                            }
+
+                            // Validate file sizes
+                            let totalSize = 0;
+                            let oversizedFiles = [];
+                            Array.from(files).forEach((file) => {
+                              const fileSizeMB = file.size / (1024 * 1024);
+                              totalSize += fileSizeMB;
+                              if (fileSizeMB > MAX_IMAGE_SIZE_MB) {
+                                oversizedFiles.push(file.name);
+                              }
+                            });
+
+                            if (oversizedFiles.length > 0) {
+                              setStatusMessage(`File(s) ${oversizedFiles.join(", ")} exceed ${MAX_IMAGE_SIZE_MB}MB limit.`);
+                              event.target.value = "";
+                              return;
+                            }
+
+                            setProductForm((prev) => ({ ...prev, imageFiles: files }));
+                            setStatusMessage("");
+                          }}
                           className="hidden"
                         />
                         <label 
@@ -579,12 +618,32 @@ export default function AdminPage() {
                            </div>
                            <div>
                               <p className="text-[10px] font-black uppercase tracking-widest text-slate-900 leading-tight">
-                                 {productForm.imageFiles ? `${productForm.imageFiles.length} files selected` : "Upload Product Images"}
+                                 {productForm.imageFiles 
+                                    ? `${productForm.imageFiles.length} of ${MAX_PRODUCT_IMAGES} images selected` 
+                                    : `Upload Product Images (Max ${MAX_PRODUCT_IMAGES})`}
                               </p>
-                              <p className="text-[9px] font-bold text-slate-400 mt-0.5">JPG, PNG up to 5MB</p>
+                              <p className="text-[9px] font-bold text-slate-400 mt-0.5">JPG, PNG, WebP up to {MAX_IMAGE_SIZE_MB}MB each</p>
                            </div>
                         </label>
                      </div>
+
+                     {productForm.imageFiles && productForm.imageFiles.length > 0 && (
+                        <div className="space-y-2">
+                           <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">Preview:</p>
+                           <div className="grid grid-cols-2 gap-3">
+                              {Array.from(productForm.imageFiles).map((file, idx) => (
+                                 <div key={idx} className="relative group/preview rounded-xl overflow-hidden border border-slate-200 bg-slate-50 aspect-square flex items-center justify-center">
+                                    <img 
+                                       src={URL.createObjectURL(file)} 
+                                       alt={`Preview ${idx + 1}`}
+                                       className="w-full h-full object-cover"
+                                    />
+                                    <span className="absolute top-2 right-2 bg-emerald-600 text-white text-[8px] font-black px-2 py-1 rounded-lg">{idx + 1}</span>
+                                 </div>
+                              ))}
+                           </div>
+                        </div>
+                     )}
                   </div>
                 </div>
 
@@ -608,11 +667,17 @@ export default function AdminPage() {
                <div className="grid gap-6">
                 {products.map((product) => (
                   <div key={product.id} className="group relative flex flex-col md:flex-row items-center gap-6 p-6 rounded-[2.5rem] border border-slate-100 bg-white transition-all hover:bg-slate-50/50 hover:shadow-xl hover:shadow-slate-900/5">
-                    <div className="h-24 w-24 rounded-2xl bg-slate-100 overflow-hidden border border-slate-100 flex-shrink-0">
-                       {product.image_url ? (
-                          <img src={product.image_url} alt={product.name} className="h-full w-full object-cover transition-transform group-hover:scale-110 duration-700" title={product.name}/>
+                    {/* Product Images Display */}
+                    <div className="flex gap-3 flex-shrink-0">
+                       {product.images && product.images.length > 0 ? (
+                          product.images.map((imgUrl, idx) => (
+                             <div key={idx} className="h-24 w-24 rounded-2xl bg-slate-100 overflow-hidden border border-slate-100 flex-shrink-0 relative">
+                                <img src={imgUrl} alt={`${product.name} - Image ${idx + 1}`} className="h-full w-full object-cover transition-transform group-hover:scale-110 duration-700" title={`${product.name} (${idx + 1})`}/>
+                                <span className="absolute top-1 right-1 bg-emerald-600 text-white text-[8px] font-black px-1.5 py-0.5 rounded">{idx + 1}</span>
+                             </div>
+                          ))
                        ) : (
-                          <div className="h-full w-full flex items-center justify-center text-slate-300">
+                          <div className="h-24 w-24 rounded-2xl bg-slate-100 overflow-hidden border border-slate-100 flex-shrink-0 flex items-center justify-center text-slate-300">
                              <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                              </svg>

@@ -13,33 +13,33 @@ const PORT = process.env.PORT || 4000;
 
 // 1. Create a simple server to keep the Keeper service itself awake
 http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Keeper is awake and active\n');
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Keeper is awake and active\n');
 }).listen(PORT, () => {
-    console.log(`🚀 Keeper server is running on port ${PORT}`);
+  console.log(`🚀 Keeper server is running on port ${PORT}`);
 });
 
 // 2. Function to ping the website(s)
 function reloadWebsite() {
-    // Ping the main site
-    axios.get(SITE_URL)
-        .then(() => {
-            console.log(`✅ [${new Date().toLocaleTimeString()}] Ping successful: ${SITE_URL}`);
-        })
-        .catch((error) => {
-            console.error(`❌ [${new Date().toLocaleTimeString()}] Ping failed for ${SITE_URL}: ${error.message}`);
-        });
+  // Ping the main site
+  axios.get(SITE_URL)
+    .then(() => {
+      console.log(`✅ [${new Date().toLocaleTimeString()}] Ping successful: ${SITE_URL}`);
+    })
+    .catch((error) => {
+      console.error(`❌ [${new Date().toLocaleTimeString()}] Ping failed for ${SITE_URL}: ${error.message}`);
+    });
 
-    // Also ping itself to keep the keeper awake
-    if (process.env.RENDER_EXTERNAL_URL) {
-        axios.get(process.env.RENDER_EXTERNAL_URL)
-            .then(() => {
-                console.log(`✅ [${new Date().toLocaleTimeString()}] Self-ping successful`);
-            })
-            .catch((err) => {
-                console.error(`❌ Self-ping failed: ${err.message}`);
-            });
-    }
+  // Also ping itself to keep the keeper awake
+  if (process.env.RENDER_EXTERNAL_URL) {
+    axios.get(process.env.RENDER_EXTERNAL_URL)
+      .then(() => {
+        console.log(`✅ [${new Date().toLocaleTimeString()}] Self-ping successful`);
+      })
+      .catch((err) => {
+        console.error(`❌ Self-ping failed: ${err.message}`);
+      });
+  }
 }
 
 // 3. Start pinging

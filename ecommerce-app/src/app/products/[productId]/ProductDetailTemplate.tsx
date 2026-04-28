@@ -15,7 +15,6 @@ export default function ProductDetailTemplate({
   product: Product, 
   relatedProducts?: Product[] 
 }) {
-  const [selectedImage, setSelectedImage] = useState(product.images?.[0] || product.image_url);
   const images = product.images || [product.image_url];
 
   const hasDiscount = product.mrp && product.mrp > product.price;
@@ -27,61 +26,57 @@ export default function ProductDetailTemplate({
       <div className="mx-auto max-w-[1440px] px-4 py-8 md:px-8 lg:py-12">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-start">
 
-          {/* LEFT COLUMN: Gallery & Buttons */}
-          <div className="lg:col-span-5 lg:sticky lg:top-24">
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col-reverse md:flex-row gap-4">
-                {/* Thumbnails */}
-                {images.length > 1 && (
-                  <div className="flex flex-row md:flex-col gap-3 overflow-x-auto md:overflow-y-auto no-scrollbar md:h-[500px] pb-2 md:w-20 shrink-0">
-                    {images.map((img, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setSelectedImage(img)}
-                        className={`group relative aspect-square w-16 shrink-0 overflow-hidden rounded-lg border-2 transition-all md:w-full ${selectedImage === img ? "border-[#2874f0]" : "border-slate-100 hover:border-slate-300"
-                          }`}
-                      >
-                        <img src={img} alt={`${product.name} ${idx}`} className="h-full w-full object-contain p-1" />
-                      </button>
-                    ))}
+          {/* LEFT COLUMN: Premium Side-by-Side Gallery */}
+          <div className="lg:col-span-7 lg:sticky lg:top-24">
+            <div className="flex flex-col gap-6">
+              {/* Product Gallery Grid */}
+              <div className={`grid gap-4 ${images.length > 1 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1"}`}>
+                {images.map((img, idx) => (
+                  <div 
+                    key={idx} 
+                    className={`relative overflow-hidden rounded-[3rem] border border-slate-100 bg-white p-8 group transition-all duration-700 hover:shadow-2xl hover:shadow-slate-200/50 ${
+                      images.length === 1 ? "aspect-square" : "aspect-[4/5]"
+                    }`}
+                  >
+                    <img
+                      src={img}
+                      alt={`${product.name} - View 0${idx + 1}`}
+                      className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-110"
+                    />
+                    
+                    {/* Wishlist on first image */}
+                    {idx === 0 && (
+                      <div className="absolute right-8 top-8 z-10">
+                        <WishlistButton product={product} />
+                      </div>
+                    )}
+                    
+                    {/* View Badge */}
+                    <div className="absolute bottom-8 left-8 flex h-9 items-center rounded-2xl bg-white/40 border border-white/50 px-4 backdrop-blur-xl shadow-sm">
+                       <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900/60">Angle View 0{idx + 1}</span>
+                    </div>
                   </div>
-                )}
-
-                {/* Main Image */}
-                <div className="relative flex-1 aspect-[1/1.2] overflow-hidden rounded-2xl border border-slate-100 bg-white p-4 group">
-                  <img
-                    src={selectedImage}
-                    alt={product.name}
-                    className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-110"
-                  />
-
-                  {/* Heart Icon (Wishlist) */}
-                  <div className="absolute right-4 top-4 z-10">
-                    <WishlistButton product={product} />
-                  </div>
-                </div>
+                ))}
               </div>
 
-              {/* Action Buttons (Flipkart Style) - Hidden on mobile, shown on desktop */}
-              <div className="hidden lg:grid grid-cols-2 gap-4 mt-4">
+              {/* Action Buttons - Desktop (Flipkart Colors) */}
+              <div className="hidden lg:grid grid-cols-2 gap-4 mt-2">
                 <AddToCartButton 
                   product={product} 
-                  className="flex h-14 items-center justify-center gap-2 rounded-lg bg-[#388e3c] text-sm font-black uppercase tracking-widest text-white shadow-lg transition-transform active:scale-95"
+                  className="flex h-16 items-center justify-center gap-3 rounded-2xl bg-[#ff9f00] text-sm font-black uppercase tracking-widest text-white shadow-xl shadow-orange-500/20 transition-all hover:bg-orange-600 active:scale-95"
                 />
                 <div className="w-full">
                    <BuyNowButton 
                      product={product} 
-                     className="flex h-14 w-full items-center justify-center gap-2 rounded-lg bg-[#2e7d32] text-sm font-black uppercase tracking-widest text-white shadow-lg transition-transform active:scale-95"
+                     className="flex h-16 w-full items-center justify-center gap-3 rounded-2xl bg-[#fb641b] text-sm font-black uppercase tracking-widest text-white shadow-xl shadow-orange-600/20 transition-all hover:bg-orange-700 active:scale-95"
                    />
                 </div>
               </div>
-
-
             </div>
           </div>
 
           {/* RIGHT COLUMN: Product Info */}
-          <div className="lg:col-span-7 space-y-8">
+          <div className="lg:col-span-5 space-y-10">
             {/* Breadcrumbs */}
             <nav className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
               <span>Home</span> <ChevronRight size={12} />
@@ -238,11 +233,11 @@ export default function ProductDetailTemplate({
         <div className="grid grid-cols-2 h-full w-full">
           <AddToCartButton 
             product={product} 
-            className="flex items-center justify-center bg-white text-slate-900 text-[10px] font-black uppercase tracking-widest border-r border-slate-100 hover:bg-slate-50 transition-colors"
+            className="flex items-center justify-center bg-[#ff9f00] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#f39700] transition-colors border-r border-white/10"
           />
           <BuyNowButton 
             product={product} 
-            className="flex items-center justify-center bg-[#388e3c] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#2e7d32] transition-colors"
+            className="flex items-center justify-center bg-[#fb641b] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#e65a16] transition-colors"
           />
         </div>
       </div>

@@ -48,13 +48,11 @@ export default async function HomePage() {
         <section className="mt-10">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-xl font-black text-slate-900 md:text-2xl">Shop by Category</h2>
-            <Link href="/products" className="text-xs font-bold uppercase tracking-widest text-emerald-600 hover:text-emerald-700">View All</Link>
           </div>
           <div className="no-scrollbar flex w-full gap-4 overflow-x-auto pb-4 snap-x">
             {categories.map((category) => (
-              <Link 
+              <div 
                 key={category.id} 
-                href={`/products?category=${category.id}`} 
                 className="flex flex-col items-center gap-3 group min-w-[70px] sm:min-w-[90px] md:min-w-[110px] snap-start"
               >
                 <div className="flex h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 items-center justify-center overflow-hidden rounded-[1.5rem] sm:rounded-[1.75rem] md:rounded-[2rem] bg-white transition-all group-hover:bg-emerald-50 group-hover:scale-105 premium-shadow border border-slate-100/50">
@@ -65,7 +63,7 @@ export default async function HomePage() {
                 <span className="w-full text-center text-[10px] sm:text-[11px] md:text-xs font-bold text-slate-800 uppercase tracking-tight">
                   {category.name}
                 </span>
-              </Link>
+              </div>
             ))}
           </div>
         </section>

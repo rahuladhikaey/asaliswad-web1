@@ -45,21 +45,22 @@ export function Footer() {
           </div>
 
           <div className="lg:col-span-4">
-            <h3 className="text-sm font-semibold uppercase tracking-[0.24em] text-yellow-300">Stay in touch</h3>
-            <p className="mt-5 text-sm leading-6 text-slate-300">
+            <h3 className="text-xs font-black uppercase tracking-[0.4em] text-amber-400">Stay in touch</h3>
+            <p className="mt-5 text-sm font-medium leading-7 text-slate-400">
               Get the latest deals, product drops, and store updates delivered straight to your inbox.
             </p>
-            <form action="#" className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <label htmlFor="newsletter" className="sr-only">Email address</label>
-              <input
-                id="newsletter"
-                type="email"
-                placeholder="Your email"
-                className="min-w-0 flex-1 rounded-3xl border border-slate-700 bg-slate-900/90 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20"
-              />
+            <form action="#" className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="relative flex-1 group">
+                <input
+                  id="newsletter"
+                  type="email"
+                  placeholder="Your email"
+                  className="w-full rounded-2xl border border-slate-800 bg-slate-900/40 px-6 py-4 text-sm text-white outline-none transition-all duration-300 backdrop-blur-sm placeholder:text-slate-600 focus:border-amber-500/50 focus:ring-4 focus:ring-amber-500/5 focus:bg-slate-900"
+                />
+              </div>
               <button
                 type="submit"
-                className="inline-flex shrink-0 items-center justify-center rounded-3xl bg-green-600 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-green-500"
+                className="inline-flex shrink-0 items-center justify-center rounded-2xl bg-emerald-600 px-8 py-4 text-[11px] font-black uppercase tracking-widest text-white shadow-lg shadow-emerald-600/20 transition-all duration-300 hover:bg-emerald-500 hover:-translate-y-0.5 active:scale-95"
               >
                 Subscribe
               </button>

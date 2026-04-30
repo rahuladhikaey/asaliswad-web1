@@ -3,12 +3,19 @@
 import { useCart } from "@/context/CartContext";
 import { Product } from "@/lib/types";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export function BuyNowButton({ product, className }: { product: Product, className?: string }) {
   const { cart, addToCart } = useCart();
+  const { session } = useAuth();
   const router = useRouter();
   
   const handleBuyNow = () => {
+    if (!session) {
+      router.push("/login?redirect=/checkout");
+      return;
+    }
+    
     // Check if item is already in cart
     const cartItem = cart.find(item => item.id === product.id);
     if (!cartItem) {

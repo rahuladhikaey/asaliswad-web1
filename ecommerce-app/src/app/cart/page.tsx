@@ -3,9 +3,34 @@
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { Header } from "@/components/Header";
+import { useAuth } from "@/context/AuthContext";
 
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart, totalItems, totalValue } = useCart();
+  const { session, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-50">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-600 border-t-transparent" />
+      </main>
+    );
+  }
+
+  if (!session) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-6 text-center">
+        <div className="max-w-md w-full rounded-[2.5rem] bg-white p-10 premium-shadow border border-slate-100">
+          <div className="mx-auto h-20 w-20 flex items-center justify-center rounded-full bg-slate-100 text-3xl mb-6">🔒</div>
+          <h2 className="text-2xl font-black text-slate-900">Sign in required</h2>
+          <p className="mt-3 text-slate-500 font-medium">Please login to your account to view your shopping bag.</p>
+          <Link href="/login" className="mt-10 inline-flex w-full items-center justify-center rounded-2xl bg-emerald-600 px-8 py-4 text-sm font-black uppercase tracking-widest text-white shadow-xl shadow-emerald-600/20 transition hover:bg-emerald-700 active:scale-95">
+            Login / Signup
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900 pb-32 md:pb-20 overflow-x-hidden">

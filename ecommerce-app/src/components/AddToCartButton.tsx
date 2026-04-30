@@ -3,11 +3,21 @@
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { Product } from "@/lib/types";
+import { useAuth } from "@/context/AuthContext";
 
 export function AddToCartButton({ product, className }: { product: Product; className?: string }) {
   const { cart, addToCart, updateQuantity, removeFromCart } = useCart();
+  const { session } = useAuth();
   const router = useRouter();
   
+  const handleAdd = () => {
+    if (!session) {
+      router.push("/login");
+      return;
+    }
+    addToCart(product, 1);
+  };
+
   const cartItem = cart.find(item => item.id === product.id);
   const quantity = cartItem?.quantity || 0;
 
@@ -38,7 +48,7 @@ export function AddToCartButton({ product, className }: { product: Product; clas
   return (
     <button
       type="button"
-      onClick={() => addToCart(product, 1)}
+      onClick={handleAdd}
       className={className || "flex h-11 w-24 items-center justify-center rounded-xl border-2 border-emerald-600 bg-emerald-50/50 text-sm font-bold uppercase text-emerald-700 shadow-sm transition-all hover:bg-emerald-600 hover:text-white active:scale-95"}
     >
       ADD

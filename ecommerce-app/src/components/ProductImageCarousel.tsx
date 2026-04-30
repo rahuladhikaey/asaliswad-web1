@@ -111,22 +111,6 @@ export default function ProductImageCarousel({
 
   return (
     <div className="relative w-full select-none">
-      <style jsx>{`
-        @keyframes panLeftToRight {
-          0%, 100% { transform: translateX(-8%) scale(1.1); }
-          50% { transform: translateX(8%) scale(1.1); }
-        }
-        @keyframes panRightToLeft {
-          0%, 100% { transform: translateX(8%) scale(1.1); }
-          50% { transform: translateX(-8%) scale(1.1); }
-        }
-        .pan-lr {
-          animation: panLeftToRight 15s ease-in-out infinite;
-        }
-        .pan-rl {
-          animation: panRightToLeft 15s ease-in-out infinite;
-        }
-      `}</style>
 
       {/* Main Carousel Container */}
       <div
@@ -146,18 +130,13 @@ export default function ProductImageCarousel({
           style={{ transform: `translateX(${currentIndex * -100}%)` }}
         >
           {images.map((img, idx) => (
-            <div key={idx} className="flex-none w-full p-4 sm:p-6">
-              <div className="relative overflow-hidden rounded-[2rem] border border-slate-100 bg-white aspect-square sm:aspect-video md:aspect-[21/9] group shadow-inner">
+            <div key={idx} className="flex-none w-full p-2">
+              <div className="relative overflow-hidden rounded-[2.5rem] bg-white aspect-square group shadow-sm border border-slate-100">
                 <img
                   src={img}
                   alt={`${productName} - View ${idx + 1}`}
-                  className={`h-full w-full object-contain transition-transform duration-700 pointer-events-none ${idx % 2 === 0 ? "pan-lr" : "pan-rl"}`}
+                  className="h-full w-full object-contain p-4 transition-transform duration-500"
                 />
-                <div className="absolute bottom-6 left-6 flex h-8 items-center rounded-full bg-white/40 border border-white/60 px-4 backdrop-blur-md">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-900">
-                    Image 0{idx + 1}
-                  </span>
-                </div>
               </div>
             </div>
           ))}

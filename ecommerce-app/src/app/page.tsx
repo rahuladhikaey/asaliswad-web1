@@ -18,7 +18,7 @@ const fetchHomeData = async () => {
     .from("products")
     .select("*")
     .order("id", { ascending: false })
-    .limit(20);
+    .limit(4);
 
   return {
     categories: (categories ?? []) as Category[],
@@ -112,10 +112,20 @@ export default async function HomePage() {
               </article>
             ))}
           </div>
+
+          {/* See All Products Button */}
+          <div className="mt-12 flex justify-center">
+            <Link 
+              href="/products" 
+              className="group relative flex items-center gap-3 overflow-hidden rounded-2xl bg-white px-10 py-5 text-sm font-black uppercase tracking-widest text-slate-900 premium-shadow transition-all hover:-translate-y-1 hover:bg-slate-900 hover:text-white active:scale-95 border border-slate-100"
+            >
+              <span>Explore All Products</span>
+              <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
+            </Link>
+          </div>
         </section>
 
       </div>
     </main>
   );
 }
-

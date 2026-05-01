@@ -78,7 +78,7 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
                       {user.email?.[0]}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-bold text-slate-900 truncate">
+                      <p className="text-sm font-bold text-slate-900 truncate max-w-[180px]">
                         {user.user_metadata?.full_name || user.email?.split("@")[0]}
                       </p>
                       <p className="text-xs text-slate-500 truncate">{user.email}</p>

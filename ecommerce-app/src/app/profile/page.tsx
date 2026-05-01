@@ -67,10 +67,10 @@ export default function ProfilePage() {
               </div>
               <div className="mb-4">
                 <span className="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-700 mb-2">Verified Member 🌟</span>
-                <h1 className="text-3xl md:text-4xl font-black text-slate-900 leading-tight">
+                <h1 className="text-3xl md:text-4xl font-black text-slate-900 leading-tight break-words line-clamp-2">
                   {user.user_metadata?.full_name || user.email?.split("@")[0]}
                 </h1>
-                <p className="mt-1 text-base font-bold text-slate-400">{user.email}</p>
+                <p className="mt-1 text-base font-bold text-slate-400 truncate max-w-[280px] md:max-w-none">{user.email}</p>
               </div>
             </div>
 

@@ -413,8 +413,8 @@ export default function AdminPage() {
               key={t.id}
               onClick={() => setTab(t.id)}
               className={`flex items-center gap-3 whitespace-nowrap rounded-2xl px-6 py-3.5 text-xs font-black uppercase tracking-widest transition-all ${tab === t.id
-                  ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/30'
-                  : 'bg-white text-slate-500 hover:bg-slate-100 border border-slate-100'
+                ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/30'
+                : 'bg-white text-slate-500 hover:bg-slate-100 border border-slate-100'
                 }`}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -879,78 +879,76 @@ export default function AdminPage() {
               <div className="grid gap-8">
                 {orders.map((order) => (
                   <div key={order.id} className="group relative flex flex-col p-4 sm:p-10 rounded-[2rem] sm:rounded-[3.5rem] border border-slate-100 bg-white transition-all hover:bg-slate-50/50 hover:shadow-2xl hover:shadow-slate-900/5">
-                      <div className="flex flex-col lg:flex-row justify-between items-start gap-4 lg:gap-6 mb-6 pb-6 border-b border-slate-100">
-                        <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
-                          <div className="flex items-center gap-3 sm:gap-4">
-                             <div className="h-8 w-8 sm:h-12 sm:w-12 rounded-full bg-slate-900 flex items-center justify-center text-white text-[10px] sm:text-sm font-black shrink-0">
-                                {order.customer_name.charAt(0).toUpperCase()}
-                             </div>
-                             <h3 className="text-base sm:text-2xl font-black tracking-tight text-slate-900 break-words">{order.customer_name}</h3>
+                    <div className="flex flex-col lg:flex-row justify-between items-start gap-4 lg:gap-6 mb-6 pb-6 border-b border-slate-100">
+                      <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+                        <div className="flex items-center gap-3 sm:gap-4">
+                          <div className="h-8 w-8 sm:h-12 sm:w-12 rounded-full bg-slate-900 flex items-center justify-center text-white text-[10px] sm:text-sm font-black shrink-0">
+                            {order.customer_name.charAt(0).toUpperCase()}
                           </div>
-                          <div className="flex flex-wrap gap-x-4 sm:gap-x-6 gap-y-1 sm:gap-y-2 text-[10px] sm:text-xs font-bold text-slate-400">
-                             <span className="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
-                                <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
-                                {order.phone}
-                             </span>
-                             <span className="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
-                                <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                {new Date(order.created_at).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
-                             </span>
-                          </div>
+                          <h3 className="text-base sm:text-2xl font-black tracking-tight text-slate-900 break-words">{order.customer_name}</h3>
                         </div>
-                        <div className="flex flex-col items-start lg:items-end gap-2 sm:gap-3 w-full lg:w-auto">
-                           <div className="flex flex-wrap justify-start lg:justify-end gap-2">
-                              <span className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ${
-                                order.payment_method === 'COD' 
-                                  ? 'bg-amber-100 text-amber-700 border border-amber-200' 
-                                  : 'bg-blue-100 text-blue-700 border border-blue-200'
-                              }`}>
-                                {order.payment_method || 'N/A'}
-                              </span>
-                              <span className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ${
-                                order.payment_status === 'COMPLETE' 
-                                  ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
-                                  : 'bg-rose-50 text-rose-600 border border-rose-100'
-                              }`}>
-                                 {order.payment_status || 'PENDING'}
-                              </span>
-                           </div>
-                           <p className="text-[8px] sm:text-[10px] font-black text-slate-300 uppercase tracking-widest break-all">ID: #{order.id} {order.razorpay_order_id ? `| RP: ${order.razorpay_order_id.slice(-8)}` : ''}</p>
+                        <div className="flex flex-wrap gap-x-4 sm:gap-x-6 gap-y-1 sm:gap-y-2 text-[10px] sm:text-xs font-bold text-slate-400">
+                          <span className="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                            <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                            {order.phone}
+                          </span>
+                          <span className="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                            <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            {new Date(order.created_at).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
+                          </span>
                         </div>
                       </div>
- 
-                      <div className="grid lg:grid-cols-[1fr_auto] gap-6 sm:gap-8">
-                        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 flex-1">
-                          <div>
-                            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 sm:mb-2">Delivery Address</p>
-                            <p className="text-[11px] sm:text-base font-bold text-slate-600 leading-relaxed bg-slate-50/50 p-3 sm:p-6 rounded-xl sm:rounded-[2rem] border border-slate-100 h-full">
-                              {order.address}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 sm:mb-2">Manifest Details</p>
-                            <div className="bg-slate-900 rounded-xl sm:rounded-[2.5rem] p-4 sm:p-8 text-slate-300 shadow-xl shadow-slate-900/10 text-[10px] sm:text-sm leading-relaxed font-mono h-full">
-                                {(() => {
-                                   try {
-                                      const items = JSON.parse(order.product_details);
-                                      if (Array.isArray(items)) {
-                                         return (
-                                            <ul className="space-y-2">
-                                               {items.map((item: any, i: number) => (
-                                                  <li key={i} className="flex justify-between border-b border-slate-800 pb-1.5 last:border-0">
-                                                     <span className="font-bold text-emerald-400">{item.name || item.product_name} <span className="text-slate-500">x{item.quantity}</span></span>
-                                                     <span className="text-slate-100">₹{item.price}</span>
-                                                  </li>
-                                               ))}
-                                            </ul>
-                                         );
-                                      }
-                                   } catch (e) { }
-                                   return <div className="whitespace-pre-wrap">{order.product_details}</div>;
-                                })()}
-                            </div>
+                      <div className="flex flex-col items-start lg:items-end gap-2 sm:gap-3 w-full lg:w-auto">
+                        <div className="flex flex-wrap justify-start lg:justify-end gap-2">
+                          <span className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ${order.payment_method === 'COD'
+                              ? 'bg-amber-100 text-amber-700 border border-amber-200'
+                              : 'bg-blue-100 text-blue-700 border border-blue-200'
+                            }`}>
+                            {order.payment_method || 'N/A'}
+                          </span>
+                          <span className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ${order.payment_status === 'COMPLETE'
+                              ? 'bg-emerald-50 text-emerald-600 border border-emerald-100'
+                              : 'bg-rose-50 text-rose-600 border border-rose-100'
+                            }`}>
+                            {order.payment_status || 'PENDING'}
+                          </span>
+                        </div>
+                        <p className="text-[8px] sm:text-[10px] font-black text-slate-300 uppercase tracking-widest break-all">ID: #{order.id} {order.razorpay_order_id ? `| RP: ${order.razorpay_order_id.slice(-8)}` : ''}</p>
+                      </div>
+                    </div>
+
+                    <div className="grid lg:grid-cols-[1fr_auto] gap-6 sm:gap-8">
+                      <div className="grid md:grid-cols-2 gap-6 sm:gap-8 flex-1">
+                        <div>
+                          <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 sm:mb-2">Delivery Address</p>
+                          <p className="text-[11px] sm:text-base font-bold text-slate-600 leading-relaxed bg-slate-50/50 p-3 sm:p-6 rounded-xl sm:rounded-[2rem] border border-slate-100 h-full">
+                            {order.address}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 sm:mb-2">Manifest Details</p>
+                          <div className="bg-slate-900 rounded-xl sm:rounded-[2.5rem] p-4 sm:p-8 text-slate-300 shadow-xl shadow-slate-900/10 text-[10px] sm:text-sm leading-relaxed font-mono h-full">
+                            {(() => {
+                              try {
+                                const items = JSON.parse(order.product_details);
+                                if (Array.isArray(items)) {
+                                  return (
+                                    <ul className="space-y-2">
+                                      {items.map((item: any, i: number) => (
+                                        <li key={i} className="flex justify-between border-b border-slate-800 pb-1.5 last:border-0">
+                                          <span className="font-bold text-emerald-400">{item.name || item.product_name} <span className="text-slate-500">x{item.quantity}</span></span>
+                                          <span className="text-slate-100">₹{item.price}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  );
+                                }
+                              } catch (e) { }
+                              return <div className="whitespace-pre-wrap">{order.product_details}</div>;
+                            })()}
                           </div>
                         </div>
+                      </div>
 
                       <div className="flex flex-col gap-2 justify-center min-w-[180px]">
                         <button
@@ -996,8 +994,8 @@ export default function AdminPage() {
                           onClick={() => handleOrderStatusUpdate(order.id, "DELIVERED")}
                           disabled={order.order_status === 'DELIVERED'}
                           className={`min-h-[2.5rem] sm:min-h-[3.5rem] px-4 py-2 sm:px-6 sm:py-3 rounded-xl sm:rounded-2xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center text-center ${order.order_status === 'DELIVERED'
-                              ? 'bg-emerald-600 text-white'
-                              : 'bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-600 hover:text-white'
+                            ? 'bg-emerald-600 text-white'
+                            : 'bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-600 hover:text-white'
                             }`}
                         >
                           {order.order_status === 'DELIVERED' ? 'Delivered ✅' : 'Mark Delivered ✅'}

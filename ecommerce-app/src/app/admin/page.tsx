@@ -878,36 +878,36 @@ export default function AdminPage() {
 
               <div className="grid gap-8">
                 {orders.map((order) => (
-                  <div key={order.id} className="group relative flex flex-col p-4 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-slate-100 bg-white transition-all hover:bg-slate-50/50 hover:shadow-2xl hover:shadow-slate-900/5">
-                      <div className="flex flex-col lg:flex-row justify-between items-start gap-4 mb-4 pb-4 border-b border-slate-100">
-                        <div className="space-y-1 min-w-0 flex-1">
-                          <div className="flex items-center gap-3">
-                             <div className="h-8 w-8 rounded-full bg-slate-900 flex items-center justify-center text-white text-[10px] font-black shrink-0">
+                  <div key={order.id} className="group relative flex flex-col p-4 sm:p-10 rounded-[2rem] sm:rounded-[3.5rem] border border-slate-100 bg-white transition-all hover:bg-slate-50/50 hover:shadow-2xl hover:shadow-slate-900/5">
+                      <div className="flex flex-col lg:flex-row justify-between items-start gap-4 lg:gap-6 mb-6 pb-6 border-b border-slate-100">
+                        <div className="space-y-1 sm:space-y-2 min-w-0 flex-1">
+                          <div className="flex items-center gap-3 sm:gap-4">
+                             <div className="h-8 w-8 sm:h-12 sm:w-12 rounded-full bg-slate-900 flex items-center justify-center text-white text-[10px] sm:text-sm font-black shrink-0">
                                 {order.customer_name.charAt(0).toUpperCase()}
                              </div>
-                             <h3 className="text-base font-black tracking-tight text-slate-900 break-words">{order.customer_name}</h3>
+                             <h3 className="text-base sm:text-2xl font-black tracking-tight text-slate-900 break-words">{order.customer_name}</h3>
                           </div>
-                          <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px] font-bold text-slate-400">
-                             <span className="flex items-center gap-1.5 whitespace-nowrap">
-                                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                          <div className="flex flex-wrap gap-x-4 sm:gap-x-6 gap-y-1 sm:gap-y-2 text-[10px] sm:text-xs font-bold text-slate-400">
+                             <span className="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                                <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                 {order.phone}
                              </span>
-                             <span className="flex items-center gap-1.5 whitespace-nowrap">
-                                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                             <span className="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                                <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 {new Date(order.created_at).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
                              </span>
                           </div>
                         </div>
-                        <div className="flex flex-col items-start lg:items-end gap-2 w-full lg:w-auto">
+                        <div className="flex flex-col items-start lg:items-end gap-2 sm:gap-3 w-full lg:w-auto">
                            <div className="flex flex-wrap justify-start lg:justify-end gap-2">
-                              <span className={`px-3 py-1 rounded-lg text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ${
+                              <span className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ${
                                 order.payment_method === 'COD' 
                                   ? 'bg-amber-100 text-amber-700 border border-amber-200' 
                                   : 'bg-blue-100 text-blue-700 border border-blue-200'
                               }`}>
                                 {order.payment_method || 'N/A'}
                               </span>
-                              <span className={`px-3 py-1 rounded-lg text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ${
+                              <span className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ${
                                 order.payment_status === 'COMPLETE' 
                                   ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' 
                                   : 'bg-rose-50 text-rose-600 border border-rose-100'
@@ -915,21 +915,21 @@ export default function AdminPage() {
                                  {order.payment_status || 'PENDING'}
                               </span>
                            </div>
-                           <p className="text-[8px] font-black text-slate-300 uppercase tracking-widest break-all">ID: #{order.id} {order.razorpay_order_id ? `| RP: ${order.razorpay_order_id.slice(-8)}` : ''}</p>
+                           <p className="text-[8px] sm:text-[10px] font-black text-slate-300 uppercase tracking-widest break-all">ID: #{order.id} {order.razorpay_order_id ? `| RP: ${order.razorpay_order_id.slice(-8)}` : ''}</p>
                         </div>
                       </div>
  
-                      <div className="grid md:grid-cols-[1fr_auto] gap-4 sm:gap-8">
-                        <div className="space-y-4">
+                      <div className="grid lg:grid-cols-[1fr_auto] gap-6 sm:gap-8">
+                        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 flex-1">
                           <div>
-                            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Delivery Address</p>
-                            <p className="text-[11px] sm:text-sm font-bold text-slate-600 leading-relaxed bg-slate-50/50 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-100">
+                            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 sm:mb-2">Delivery Address</p>
+                            <p className="text-[11px] sm:text-base font-bold text-slate-600 leading-relaxed bg-slate-50/50 p-3 sm:p-6 rounded-xl sm:rounded-[2rem] border border-slate-100 h-full">
                               {order.address}
                             </p>
                           </div>
                           <div>
-                            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Manifest Details</p>
-                            <div className="bg-slate-900 rounded-xl sm:rounded-[2rem] p-4 sm:p-6 text-slate-300 shadow-xl shadow-slate-900/10 text-[10px] sm:text-xs leading-relaxed font-mono">
+                            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 sm:mb-2">Manifest Details</p>
+                            <div className="bg-slate-900 rounded-xl sm:rounded-[2.5rem] p-4 sm:p-8 text-slate-300 shadow-xl shadow-slate-900/10 text-[10px] sm:text-sm leading-relaxed font-mono h-full">
                                 {(() => {
                                    try {
                                       const items = JSON.parse(order.product_details);

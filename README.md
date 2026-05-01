@@ -60,28 +60,25 @@ To connect your database, follow these steps in your [Supabase Dashboard](https:
 
 ---
 
-## 🌐 Deployment & Hosting (Your Domain)
+## 🌐 Deployment & Hosting
 
-To host this website on your own domain, we recommend using **Cloudflare Pages** for optimal performance and global distribution:
+This platform is optimized for modern hosting providers like **Render**, **Vercel**, or **Netlify**.
 
-### 1. Deploy to Cloudflare Pages
-1. Go to the [Cloudflare Dashboard](https://dash.cloudflare.com/) and navigate to **Workers & Pages**.
-2. Click **Create** > **Pages** > **Connect to Git**.
-3. Connect your GitHub repository.
-4. **Build Settings**:
-   - **Framework Preset**: `None`
-   - **Build Command**: `npm run build-pages`
-   - **Build Output Directory**: `.vercel/output/static`
-5. **Environment Variables**:
+### 1. Deploying to Render / Vercel
+1. Connect your GitHub repository to your hosting provider.
+2. **Build Settings**:
+   - **Framework Preset**: `Next.js`
+   - **Build Command**: `npm run build`
+   - **Build Output Directory**: `.next`
+3. **Environment Variables**:
+   Add the following variables to your project settings:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-6. Click **Save and Deploy**.
+   - `RAZORPAY_KEY_ID`
+   - `RAZORPAY_KEY_SECRET`
 
-### 2. Connect Your Domain
-1. In the Cloudflare Pages Dashboard, go to your project **Settings > Custom Domains**.
-2. Click **Set up a custom domain**.
-3. Type your domain name (e.g., `asaliswad.com`).
-4. Cloudflare will automatically handle the DNS records if your domain is also managed by Cloudflare.
+### 2. Custom Domain
+Most providers allow you to connect a custom domain (e.g., `asaliswad.com`) easily through their dashboard under **Settings > Domains**.
 
 ---
 

@@ -11,8 +11,9 @@ export default function WishlistPage() {
   const { addToCart } = useCart();
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900 pb-20">
+    <main className="min-h-screen bg-slate-50 text-slate-900">
       <Header title="My Wishlist" subtitle="Saved for later" />
+
 
       <section className="mx-auto max-w-5xl px-4 py-8 md:px-8">
         <div className="flex flex-col lg:flex-row gap-8">

@@ -33,8 +33,9 @@ export default function CartPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900 pb-32 md:pb-20 overflow-x-hidden">
+    <main className="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden">
       <Header title="Shopping Bag" subtitle="Your Selection" />
+
 
       <section className="mx-auto max-w-4xl px-4 py-6 md:py-12 md:px-8">
         <div className="rounded-[2.5rem] bg-white p-6 md:p-10 premium-shadow border border-slate-100">

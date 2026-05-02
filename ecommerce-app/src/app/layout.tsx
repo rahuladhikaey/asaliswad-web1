@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { BottomNav } from "@/components/BottomNav";
-import { AppLayoutWrapper } from "../components/AppLayoutWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,16 +41,14 @@ export default function RootLayout({
     >
       <body className="min-h-full font-sans bg-white text-slate-900 overflow-x-hidden">
         <Providers>
-          {/*
-           * AppLayoutWrapper handles the platform switch:
-           *  - App (Android WebView): no Header, no Footer, bottom padding for BottomNav
-           *  - Web (Browser):         Header, Footer, no BottomNav
-           */}
-          <AppLayoutWrapper footer={<Footer />} bottomNav={<BottomNav />}>
+          <main className="min-h-screen">
             {children}
-          </AppLayoutWrapper>
+          </main>
+          <Footer />
         </Providers>
+
       </body>
     </html>
   );
 }
+

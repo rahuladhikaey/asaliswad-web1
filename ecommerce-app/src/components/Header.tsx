@@ -75,21 +75,23 @@ export function Header({
         </div>
 
         {/* Desktop Navigation Links (Large Screens) */}
-        <nav className="hidden xl:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-10">
           {[
             { name: "Home", href: "/" },
             { name: "Shop Spices", href: "/products" },
             { name: "AI Assistant", href: "/assistant" },
+            { name: "Track Order", href: "/profile/orders" },
           ].map((link) => (
             <Link 
               key={link.name} 
               href={link.href}
-              className="text-xs font-black uppercase tracking-widest text-slate-500 hover:text-emerald-600 transition-colors"
+              className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-emerald-600 transition-all hover:-translate-y-0.5 active:scale-95"
             >
               {link.name}
             </Link>
           ))}
         </nav>
+
 
 
         {/* Global Search Bar (Desktop) */}

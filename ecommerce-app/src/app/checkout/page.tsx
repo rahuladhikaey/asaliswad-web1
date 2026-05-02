@@ -209,8 +209,9 @@ function CheckoutContent() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900 pb-20 overflow-x-hidden">
+    <main className="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden">
       <Header title="Secure Checkout" subtitle="Fast Delivery" />
+
 
       <section className="mx-auto max-w-5xl px-4 py-6 md:py-12 md:px-8">
         <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr]">

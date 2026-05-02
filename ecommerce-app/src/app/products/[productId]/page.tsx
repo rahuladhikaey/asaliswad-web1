@@ -81,8 +81,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-white text-slate-900 pb-20 overflow-x-hidden">
+    <main className="min-h-screen bg-white text-slate-900 overflow-x-hidden">
       <Header title={product.name} subtitle={product.category_name || "Premium Quality"} />
+
       <ProductDetailTemplate product={product} relatedProducts={relatedProducts} />
     </main>
   );

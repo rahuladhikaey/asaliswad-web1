@@ -42,8 +42,9 @@ function OrderSuccessContent() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900 pb-20">
+    <main className="min-h-screen bg-slate-50 text-slate-900">
       <Header title="Order Confirmed" subtitle={order?.payment_method === "COD" ? "Order Placed Successfully" : "Payment Complete"} />
+
 
       <section className="mx-auto max-w-3xl px-4 py-12">
         <div className="rounded-[3rem] bg-white p-8 md:p-12 premium-shadow border border-slate-100 text-center">

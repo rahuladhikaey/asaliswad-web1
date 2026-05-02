@@ -35,7 +35,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900 pb-20 overflow-x-hidden">
+    <main className="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden">
       {/* Premium Sticky Header */}
       <header className="sticky top-0 z-50 flex items-center justify-between border-b border-slate-200/60 bg-white/80 px-4 py-3 backdrop-blur-xl md:px-8">
         <div className="flex items-center gap-4">

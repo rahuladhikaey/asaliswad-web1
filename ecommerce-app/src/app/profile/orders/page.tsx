@@ -71,8 +71,9 @@ export default function MyOrdersPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900 pb-20">
+    <main className="min-h-screen bg-slate-50 text-slate-900">
       <Header title="My Orders" subtitle="Track your premium spices" />
+
 
       <section className="mx-auto max-w-4xl px-4 py-12 md:px-8">
         <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
